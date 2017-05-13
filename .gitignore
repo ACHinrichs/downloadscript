@@ -46,5 +46,5 @@ flycheck_*.el
 # directory configuration
 .dir-locals.el
 
-#download-dir
-/DS/
+# files with a _private schould not be published!
+*_private*

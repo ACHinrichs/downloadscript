@@ -1,17 +1,12 @@
-import downloadscript.downloadscript as ds
-print("Fetching Uebungunen for DSAL=========")
+import downloadscript as ds
+import config_private as config
 
-ds.REG_FINDSTRING  = b"<a href=\"\/Lehre\/SS17\/DSA\/Uebung\d+.pdf"
-ds.REG_SUBSTRING   = b"<a href=\"\/Lehre\/SS17\/DSA\/"
-ds.URL_MATERIALS   = r"http://algo.rwth-aachen.de/Lehre/SS17/DSA/"
-ds.URL_LECTURENOTES= r"http://algo.rwth-aachen.de/Lehre/SS17/DSA.php"
-ds.OUT_DIR     = r"Uebungen/"
-ds.download()
-print("Fetching Vorlesungen================")
-
-ds.REG_FINDSTRING  = b"<a href=\"\/Lehre\/SS17\/DSA\/v\d+.pdf"
-ds.REG_SUBSTRING   = b"<a href=\"\/Lehre\/SS17\/DSA\/"
-ds.URL_MATERIALS   = r"http://algo.rwth-aachen.de/Lehre/SS17/DSA/"
-ds.URL_LECTURENOTES= r"http://algo.rwth-aachen.de/Lehre/SS17/DSA.php"
-ds.OUT_DIR     = r"Vorlesungen/"
-ds.download()
+for lecture in config.lectures:
+    print("NOW FETCHING "+lecture[0])
+    ds.REG_FINDSTRING    = lecture[1]
+    ds.REG_SUBSTRING     = lecture[2]
+    ds.REG_URL_MATERIALS = lecture[3]
+    ds.URL_LECTURENOTES  = lecture[4]
+    ds.OUT_DIR = lecture[5]
+    ds.download()
+print("All done")
