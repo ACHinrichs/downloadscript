@@ -6,11 +6,6 @@ import sys
 import subprocess
 import argparse
 
-REG_FINDSTRING  = b"<a href=\"\/Lehre\/SS17\/DSA\/Uebung\d+.pdf"
-REG_SUBSTRING   = b"<a href=\"\/Lehre\/SS17\/DSA\/"
-URL_MATERIALS   = r"http://algo.rwth-aachen.de/Lehre/SS17/DSA/"
-URL_LECTURENOTES= r"http://algo.rwth-aachen.de/Lehre/SS17/DSA.php"
-OUT_DIR     = r"Uebungen/"
 
 def fetchHTML(URL):
     response = urllib.urlopen(URL)
@@ -30,14 +25,18 @@ def updatePDFs(s, ls):
     for i in range(0, len(s)):
         s[i] = re.sub(REG_SUBSTRING, b"", s[i]).decode('utf8')
         if not s[i] in ls:
-            with urllib.urlopen(URL_MATERIALS + s[i]) as response:
-                source = response.read()
-            file = open(OUT_DIR + s[i], "wb")
-            file.write(source)
-            file.close()
+            try:
+                with urllib.urlopen(URL_MATERIALS + s[i]) as response:
+                    source = response.read()
+                    file = open(OUT_DIR + s[i], "wb")
+                    file.write(source)
+                    file.close()
+                    
+                    print("fetched: " + s[i])
+                    changed = True
+            except (Exception):
+                print("[ERR] during download of "+URL_MATERIALS + s[i])
             
-            print("fetched: " + s[i])
-            changed = True
     return changed;
 
 def download():
@@ -48,7 +47,8 @@ def download():
     #ls = subprocess.check_output('ls DS/', shell=True)
     ls = ""
     try:
-        ls = os.listdir(OUT_DIR)
+        print("./"+OUT_DIR)
+        ls = os.listdir("./"+OUT_DIR)
     except (Exception):
         print(OUT_DIR+" doesn't exist, now creating");
         os.mkdir(r"./"+OUT_DIR)      
